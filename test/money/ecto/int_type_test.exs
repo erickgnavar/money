@@ -1,5 +1,5 @@
 if Code.ensure_compiled?(Ecto.Type) do
-  defmodule Money.Ecto.TypeTest do
+  defmodule Money.Ecto.IntTypeTest do
     use ExUnit.Case, async: false
     doctest Money.Ecto.IntType
 

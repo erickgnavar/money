@@ -4,7 +4,7 @@ defmodule Money.Ecto.MoneyzMigration do
       use Ecto.Migration
 
       def up do
-        execute "CREATE TYPE moneyz AS(amount INTEGER, currency VARCHAR);"
+        execute "CREATE TYPE moneyz AS(amount NUMERIC(19,0), currency VARCHAR);"
       end
 
       def down do

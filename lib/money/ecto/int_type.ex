@@ -13,7 +13,7 @@ if Code.ensure_compiled?(Ecto.Type) do
         end
     ## Schema Example
         schema "my_table" do
-          field :amount, Money.Ecto.Type
+          field :amount, Money.Ecto.IntType
         end
     """
 

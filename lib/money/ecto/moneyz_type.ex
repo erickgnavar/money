@@ -11,15 +11,15 @@ if Code.ensure_compiled?(Ecto.Type) do
           use Ecto.Schema
           schema "items" do
             field :name, :string
-            field :price, Money.Ecto
+            field :price, Money.Ecto.MoneyzType
           end
         end
     Migration:
         def change do
           execute "
             CREATE TYPE moneyz AS (
-              amount integer,
-              currency varchar
+              amount NUMERIC(precision, scale),
+              currency VARCHAR
             );
           "
           create table(:items) do
@@ -49,10 +49,9 @@ if Code.ensure_compiled?(Ecto.Type) do
     def cast(%Money{}=money), do: {:ok, money}
     def cast(_), do: :error
 
-    @spec load(integer | {integer, String.t}) :: {:ok, Money.t}
-    def load(int) when is_integer(int), do: {:ok, Money.new(int)}
-    def load({amount, currency}) when is_integer(amount) and is_binary(currency) do
-      {:ok, Money.new(amount, currency)}
+    @spec load({%Decimal{}, String.t}) :: {:ok, Money.t}
+    def load({amount, currency}) when is_binary(currency) do
+      {:ok, Money.new(Decimal.to_integer(amount), currency)}
     end
     def load(_), do: :error
 

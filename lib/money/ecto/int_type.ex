@@ -1,25 +1,19 @@
 if Code.ensure_compiled?(Ecto.Type) do
-  defmodule Money.Ecto.Type do
+  defmodule Money.Ecto.IntType do
     @moduledoc """
     Provides a type for Ecto usage.
     The underlying data type should be an integer.
-
     This type expects you to use a single currency.
     The currency must be defined in your configuration.
-
         config :money,
           default_currency: :GBP
-
     ## Migration Example
-
         create table(:my_table) do
           add :amount, :integer
         end
-
     ## Schema Example
-
         schema "my_table" do
-          field :amount, Money.Ecto.Type
+          field :amount, Money.Ecto.IntType
         end
     """
 

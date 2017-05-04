@@ -66,7 +66,7 @@ Money.Currency.name(afn(500))   # Afghani
 Money.Currency.get(:AFN)        # %{name: "Afghani", symbol: "؋"}
 ```
 
-### Money.Ecto.Type
+### Money.Ecto.IntType
 
 Bring `Money` to your Ecto project.
 The underlying database type is `integer`
@@ -79,7 +79,29 @@ end
 
 # model/schema
 schema "my_table" do
-  field :amount, Money.Ecto.Type
+  field :amount, Money.Ecto.IntType
+end
+```
+
+### Money.Ecto.MoneyzType
+
+Bring `Money` to your Ecto project.
+The underlying database type is `moneyz`
+
+```elixir
+# migration create data type
+defmodule MyApp.Repo.Migrations.MoneyzType do
+  use Money.Ecto.MoneyzMigration
+end
+
+# migration implementation
+create table(:my_table) do
+  add :amount, :moneyz
+end
+
+# model/schema
+schema "my_table" do
+  field :amount, Money.Ecto.MoneyzType
 end
 ```
 

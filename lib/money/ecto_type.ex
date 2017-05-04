@@ -37,8 +37,9 @@ if Code.ensure_compiled?(Ecto.Type) do
     def cast(%Money{}=money), do: {:ok, money}
     def cast(_), do: :error
 
-    @spec load(integer) :: {:ok, Money.t}
+    @spec load(integer | Decimal) :: {:ok, Money.t}
     def load(int) when is_integer(int), do: {:ok, Money.new(int)}
+    def load(decimal), do: {:ok, Money.new(Decimal.to_integer(decimal))}
 
     @spec dump(integer | Money.t) :: {:ok, :integer}
     def dump(int) when is_integer(int), do: {:ok, int}

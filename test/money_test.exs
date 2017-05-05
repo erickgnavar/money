@@ -32,11 +32,13 @@ defmodule MoneyTest do
     assert Money.parse("$ 1,000.0", :USD) == {:ok, usd(100000)}
     assert Money.parse("$ 1000.0", :USD) == {:ok, usd(100000)}
     assert Money.parse("1000.0", :USD) == {:ok, usd(100000)}
+    assert Money.parse(1000, :USD) == {:ok, usd(100000)}
 
     assert Money.parse("$-1,000.00", :USD) == {:ok, usd(-100000)}
     assert Money.parse("$ -1,000.00", :USD) == {:ok, usd(-100000)}
     assert Money.parse("$- 1,000.00", :USD) == {:ok, usd(-100000)}
     assert Money.parse("-1000.0", :USD) == {:ok, usd(-100000)}
+    assert Money.parse(-1000, :USD) == {:ok, usd(-100000)}
 
     assert Money.parse(".25", :USD) == {:ok, usd(25)}
     assert Money.parse(",25", :EUR, separator: ".", delimeter: ",") == {:ok, eur(25)}
@@ -51,6 +53,7 @@ defmodule MoneyTest do
     assert Money.parse("$ 1.000,0", :EUR, separator: ".", delimeter: ",") == {:ok, eur(100000)}
     assert Money.parse("€ 1000,0", :EUR, separator: ".", delimeter: ",") == {:ok, eur(100000)}
     assert Money.parse("1000,0", :EUR, separator: ".", delimeter: ",") == {:ok, eur(100000)}
+    assert Money.parse(1000, :EUR, separator: ".", delimeter: ",") == {:ok, eur(100000)}
   end
 
   test "parse/2 with default currency set" do
@@ -66,6 +69,7 @@ defmodule MoneyTest do
     assert Money.parse(1_000.00, :EUR) == {:ok, eur(100000)}
     assert Money.parse(1_000.00, :JPY) == {:ok, jpy(1000)}
     assert Money.parse(1_000.00, :OMR) == {:ok, omr(1_000_000)}
+    assert Money.parse(1_000, :OMR) == {:ok, omr(1_000_000)}
   end
 
   test "test factory USD" do

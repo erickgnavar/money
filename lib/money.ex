@@ -74,7 +74,7 @@ defmodule Money do
   def new(int, currency) when is_integer(int),
     do: %Money{amount: int, currency: Currency.to_atom(currency)}
 
-  @spec parse(String.t | float, atom | String.t, Keyword.t) :: {:ok, t}
+  @spec parse(integer | String.t | float, atom | String.t, Keyword.t) :: {:ok, t}
   @doc ~S"""
   Parse a value into a `Money` type.
 
@@ -97,6 +97,8 @@ defmodule Money do
       {:ok, %Money{amount: 123456, currency: :USD}}
       iex> Money.parse(-1_234.56, :USD)
       {:ok, %Money{amount: -123456, currency: :USD}}
+      iex> Money.parse(1_234, :USD)
+      {:ok, %Money{amount: 123400, currency: :USD}}
   """
   def parse(value, currency \\ nil, opts \\ [])
   def parse(value, nil, opts) do
@@ -120,6 +122,9 @@ defmodule Money do
     rescue
       _ -> :error
     end
+  end
+  def parse(integer, currency, _opts) when is_integer(integer) do
+    {:ok, new(round(integer * Currency.sub_units_count!(currency)), currency)}
   end
   def parse(float, currency, _opts) when is_float(float) do
     {:ok, new(round(float * Currency.sub_units_count!(currency)), currency)}

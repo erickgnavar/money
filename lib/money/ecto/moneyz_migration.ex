@@ -4,7 +4,7 @@ defmodule Money.Ecto.MoneyzMigration do
       use Ecto.Migration
 
       def up do
-        execute "CREATE TYPE moneyz AS(amount NUMERIC(19,0), currency VARCHAR);"
+        execute "DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_catalog.pg_type WHERE typname = 'moneyz') THEN CREATE TYPE moneyz AS(amount NUMERIC(19,0), currency TEXT); END IF; END$$;"
       end
 
       def down do

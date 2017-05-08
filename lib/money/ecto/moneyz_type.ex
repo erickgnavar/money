@@ -17,10 +17,15 @@ if Code.ensure_compiled?(Ecto.Type) do
     Migration:
         def change do
           execute "
-            CREATE TYPE moneyz AS (
-              amount NUMERIC(precision, scale),
-              currency VARCHAR
-            );
+            DO $$
+              BEGIN
+                IF NOT EXISTS (SELECT 1 FROM pg_catalog.pg_type WHERE typname = 'moneyz') THEN
+                  CREATE TYPE moneyz AS (
+                    amount NUMERIC(precision, scale),
+                    currency TEXT);
+                END IF;
+              END
+            $$;
           "
           create table(:items) do
             add :name, :string

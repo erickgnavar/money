@@ -20,8 +20,8 @@ defmodule Money.Ecto.MoneyzMigration do
 
       def down do
         execute "
-        DROP DOMAIN IF EXISTS currency_loose_type;
         DROP TYPE moneyz;
+        DROP DOMAIN IF EXISTS currency_loose_type;
         "
       end
     end

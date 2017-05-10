@@ -17,10 +17,16 @@ if Code.ensure_compiled?(Ecto.Type) do
     Migration:
         def change do
           execute "
-            CREATE TYPE moneyz AS (
-              amount NUMERIC(precision, scale),
-              currency VARCHAR
-            );
+          DO $$
+            BEGIN
+              IF NOT EXISTS (SELECT 1 FROM pg_catalog.pg_type WHERE typname = 'moneyz') THEN
+                DROP DOMAIN IF EXISTS currency_loose_type;
+                CREATE DOMAIN currency_loose_type AS TEXT CHECK ( VALUE ~ '^[A-Z]{2,3}$' );
+                CREATE TYPE moneyz AS (
+                  amount NUMERIC(precision,scale),
+                  currency currency_loose_type
+                );
+            END IF;
           "
           create table(:items) do
             add :name, :string

@@ -215,6 +215,25 @@ defmodule MoneyTest do
     assert Money.to_string(zar(-1234567890)) == "R-12,345,678.90"
   end
 
+  test "to_string with negative sign to the left side" do
+    try do
+      Application.put_env(:money, :negative_left, false)
+
+      assert Money.to_string(usd(-500), negative_left: true) == "-$5.00"
+      assert Money.to_string(usd(-500)) == "$-5.00"
+    after
+      Application.delete_env(:money, :negative_left)
+    end
+
+    try do
+      Application.put_env(:money, :negative_left, true)
+
+      assert Money.to_string(usd(-500)) == "-$5.00"
+    after
+      Application.delete_env(:money, :negative_left)
+    end
+  end
+
   test "to_string with fractional_unit false" do
     assert Money.to_string(usd(500), fractional_unit: false) == "$5"
     assert Money.to_string(eur(1234), fractional_unit: false) == "€12"

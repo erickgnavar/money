@@ -432,16 +432,19 @@ defmodule Money do
       "Total: $100.00"
   """
   def to_string(%Money{}=money, opts \\ []) do
-    {separator, delimeter, symbol, symbol_on_right, symbol_space, fractional_unit} = get_display_options(money, opts)
+    {separator, delimeter, symbol, symbol_on_right, negative_left, symbol_space, fractional_unit} = get_display_options(money, opts)
     number = format_number(money, separator, delimeter, fractional_unit, money)
     sign = if negative?(money), do: "-"
     space = if symbol_space, do: " "
 
-    parts = if symbol_on_right do
-              [sign, number, space, symbol]
-            else
-              [symbol, space, sign, number]
-            end
+    parts = cond do 
+      symbol_on_right == true ->
+        [sign, number, space, symbol]
+      symbol_on_right == false && negative_left == true ->
+        [sign, symbol, space, number]
+      symbol_on_right == false ->
+        [symbol, space, sign, number]
+    end
     parts |> Enum.join |> String.lstrip
   end
 
@@ -462,15 +465,17 @@ defmodule Money do
 
     default_symbol = Application.get_env(:money, :symbol, true)
     default_symbol_on_right = Application.get_env(:money, :symbol_on_right, false)
+    default_negative_left = Application.get_env(:money, :negative_left, false)
     default_symbol_space = Application.get_env(:money, :symbol_space, false)
     default_fractional_unit = Application.get_env(:money, :fractional_unit, true)
 
     symbol = if Keyword.get(opts, :symbol, default_symbol), do: Currency.symbol(m), else: ""
     symbol_on_right = Keyword.get(opts, :symbol_on_right, default_symbol_on_right)
+    negative_left = Keyword.get(opts, :negative_left, default_negative_left)
     symbol_space = Keyword.get(opts, :symbol_space, default_symbol_space)
     fractional_unit = Keyword.get(opts, :fractional_unit, default_fractional_unit)
 
-    {separator, delimeter, symbol, symbol_on_right, symbol_space, fractional_unit}
+    {separator, delimeter, symbol, symbol_on_right, negative_left, symbol_space, fractional_unit}
   end
 
   defp get_parse_options(opts) do

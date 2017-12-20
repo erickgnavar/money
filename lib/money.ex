@@ -422,6 +422,8 @@ defmodule Money do
       "1234.56"
       iex> Money.to_string(Money.new(123456, :EUR), fractional_unit: false)
       "€1,234"
+      iex> Money.to_string(Money.new(-123456, :EUR), negative_left: true)
+      "-€1,234"
 
   It can also be interpolated (It implements the String.Chars protocol)
   To control the formatting, you can use the above options in your config,

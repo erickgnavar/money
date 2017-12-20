@@ -406,6 +406,7 @@ defmodule Money do
       "1.23"
     - `symbol` - default `true`, sets whether to display the currency symbol or not.
     - `symbol_on_right` - default `false`, display the currency symbol on the right of the number, eg: 123.45€
+    - `negative_left` - default `false`,  sets the negative sign to the left of the currency symbol, eg: -€123,45 
     - `symbol_space` - default `false`, add a space between currency symbol and number, eg: € 123,45 or 123.45 €
     - `fractional_unit` - default `true`, show the remaining units after the delimeter
 

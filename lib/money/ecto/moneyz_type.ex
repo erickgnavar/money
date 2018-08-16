@@ -52,6 +52,12 @@ if Code.ensure_compiled?(Ecto.Type) do
     def cast({amount, currency}) when is_binary(amount) do
       Money.parse(amount, currency)
     end
+    def cast(%{"amount" => amount, "currency" => currency}) when is_integer(amount) do
+      {:ok, Money.new(amount, currency)}
+    end
+    def cast(%{"amount" => amount, "currency" => currency}) when is_binary(amount) do
+      Money.parse(amount, currency)
+    end
     def cast(%Money{}=money), do: {:ok, money}
     def cast(_), do: :error
 

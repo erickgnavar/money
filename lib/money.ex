@@ -406,7 +406,7 @@ defmodule Money do
       "1.23"
     - `symbol` - default `true`, sets whether to display the currency symbol or not.
     - `symbol_on_right` - default `false`, display the currency symbol on the right of the number, eg: 123.45€
-    - `negative_left` - default `false`,  sets the negative sign to the left of the currency symbol, eg: -€123,45 
+    - `negative_left` - default `false`,  sets the negative sign to the left of the currency symbol, eg: -€123,45
     - `symbol_space` - default `false`, add a space between currency symbol and number, eg: € 123,45 or 123.45 €
     - `fractional_unit` - default `true`, show the remaining units after the delimeter
 
@@ -423,7 +423,7 @@ defmodule Money do
       iex> Money.to_string(Money.new(123456, :EUR), fractional_unit: false)
       "€1,234"
       iex> Money.to_string(Money.new(-123456, :EUR), negative_left: true)
-      "-€1,234"
+      "-€1,234.56"
 
   It can also be interpolated (It implements the String.Chars protocol)
   To control the formatting, you can use the above options in your config,
@@ -440,7 +440,7 @@ defmodule Money do
     sign = if negative?(money), do: "-"
     space = if symbol_space, do: " "
 
-    parts = cond do 
+    parts = cond do
       symbol_on_right == true ->
         [sign, number, space, symbol]
       symbol_on_right == false && negative_left == true ->

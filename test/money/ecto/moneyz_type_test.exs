@@ -37,6 +37,17 @@ if Code.ensure_compiled?(Ecto.Type) do
       assert MoneyzType.cast(Money.new(1000)) == {:ok, Money.new(1000, :GBP)}
     end
 
+    test "cast/1 Map" do
+      assert MoneyzType.cast(%{
+               "amount"=> 1000,
+               "currency"=>"EUR"
+             }) == {:ok, Money.new(1000, :EUR)}
+      assert MoneyzType.cast(%{
+               "amount"=> "10.0",
+               "currency"=>"EUR"
+             }) == {:ok, Money.new(1000, :EUR)}
+    end
+
     test "cast/1 other" do
       assert MoneyzType.cast([]) == :error
     end
